@@ -66,7 +66,7 @@ Formatter는 [google-java-format](https://github.com/google/google-java-format)�
 }
 ```
 
-## /api/todos?todoAuthor={todoAuthor-name}
+## /api/todos?author={author-name}
 
 ### `GET` 해당 작성자의 todo 반환
 
