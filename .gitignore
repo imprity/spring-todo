@@ -37,3 +37,6 @@ out/
 
 ### MISC ###
 tmp/
+
+# TODO : DB 주소와 DB 유저, 비밀번호를 설정 할수 있기 전까진 application.properties는 ignore
+src/main/resources/application.properties
