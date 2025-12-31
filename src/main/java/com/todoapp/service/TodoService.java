@@ -5,6 +5,7 @@ import com.todoapp.dto.TodoResponse;
 import com.todoapp.entity.Todo;
 import com.todoapp.repository.TodoRepository;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,21 @@ public class TodoService {
 
     repo.save(todo);
 
+    return todoToTodoResponse(todo);
+  }
+
+  @Transactional(readOnly = true)
+  public List<TodoResponse> getTodos(Optional<String> author) {
+    if (author.isPresent()) {
+      return repo.findByAuthor(author.get()).stream()
+          .map(this::todoToTodoResponse)
+          .collect(Collectors.toList());
+    } else {
+      return repo.findAll().stream().map(this::todoToTodoResponse).collect(Collectors.toList());
+    }
+  }
+
+  private TodoResponse todoToTodoResponse(Todo todo) {
     return new TodoResponse(
         todo.getId(),
         todo.getAuthor(),
@@ -33,21 +49,5 @@ public class TodoService {
         todo.getDate(),
         todo.getCreatedAt(),
         todo.getModifiedAt());
-  }
-
-  @Transactional
-  public List<TodoResponse> getTodos() {
-    return repo.findAll().stream()
-        .map(
-            todo ->
-                new TodoResponse(
-                    todo.getId(),
-                    todo.getAuthor(),
-                    todo.getTitle(),
-                    todo.getBody(),
-                    todo.getDate(),
-                    todo.getCreatedAt(),
-                    todo.getModifiedAt()))
-        .collect(Collectors.toList());
   }
 }
