@@ -1,0 +1,77 @@
+POST /api/todos
+
+== REQUEST ==
+
+{
+  "password" : "69420",
+  "todoAuthor" : "momo", "todoTitle" : "", "todoBody" : "",
+  "todoDate" : "2000-01-22T00:00:00.0000000"
+}
+
+== RESPONSE ==
+
+status code : 201 CREATED
+
+{
+  "todoId" : "{todoId}",
+  "todoAuthor" : "momo",
+  "todoTitle" : "",
+  "todoBody" : "",
+  "todoDate" : "2000-01-22T00:00:00",
+  "createdAt" : "1111-02-03T04:05:06.777777",
+  "modifiedAt" : "1111-02-03T04:05:06.777777"
+}
+
+POST /api/todos
+
+== REQUEST ==
+
+{
+  "password" : "69420",
+  "todoAuthor" : "kiki", "todoTitle" : "", "todoBody" : "",
+  "todoDate" : "2000-01-22T00:00:00.0000000"
+}
+
+== RESPONSE ==
+
+status code : 201 CREATED
+
+{
+  "todoId" : "{todoId}",
+  "todoAuthor" : "kiki",
+  "todoTitle" : "",
+  "todoBody" : "",
+  "todoDate" : "2000-01-22T00:00:00",
+  "createdAt" : "1111-02-03T04:05:06.777777",
+  "modifiedAt" : "1111-02-03T04:05:06.777777"
+}
+
+GET /api/todos/1
+
+== RESPONSE ==
+
+status code : 200 OK
+
+{
+  "todoId" : "{todoId}",
+  "todoAuthor" : "momo",
+  "todoTitle" : "",
+  "todoBody" : "",
+  "todoDate" : "2000-01-22T00:00:00",
+  "createdAt" : "1111-02-03T04:05:06.777777",
+  "modifiedAt" : "1111-02-03T04:05:06.777777"
+}
+
+GET /api/todos/123456789
+
+== RESPONSE ==
+
+status code : 500 INTERNAL_SERVER_ERROR
+
+{
+  "timestamp" : "1111-02-03T04:05:06.666Z",
+  "status" : 500,
+  "error" : "Internal Server Error",
+  "path" : "/api/todos/123456789"
+}
+

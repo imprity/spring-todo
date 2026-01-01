@@ -1,5 +1,6 @@
 package com.todoapp;
 
+import com.todoapp.dto.TodoResponse;
 import jakarta.annotation.PostConstruct;
 import org.approvaltests.Approvals;
 import org.approvaltests.core.Options;
@@ -13,6 +14,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpMethod;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.client.RestTestClient;
+import tools.jackson.databind.ObjectMapper;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureRestTestClient
@@ -30,6 +32,9 @@ class ApiTest {
     helper = new ApiTestHelper(testClient, port);
     helper.setFieldsToCheckIfDate("createdAt", "modifiedAt");
     helper.addFieldsToReplace("1111-02-03T04:05:06.777777", "createdAt", "modifiedAt", "todoId");
+
+    // spring 기본 에러 timestamp 제거
+    helper.addFieldsToReplace("1111-02-03T04:05:06.666Z", "timestamp");
     helper.addFieldsToReplace("{todoId}", "todoId");
 
     // approvaltests는 option이 없으면 diff툴을 띄우도록 설정이 되어있습니다.
@@ -154,6 +159,41 @@ class ApiTest {
         """;
 
     helper.sendRequest("/api/todos", HttpMethod.POST, todo);
+
+    Approvals.verify(helper.end(), opt);
+  }
+
+  @Test
+  @DirtiesContext
+  void getById() {
+    helper.begin();
+
+    String todo1 =
+        """
+        {
+          "password" : "69420",
+          "todoAuthor" : "momo", "todoTitle" : "", "todoBody" : "",
+          "todoDate" : "2000-01-22T00:00:00.0000000"
+        }
+        """;
+    String todo2 =
+        """
+        {
+          "password" : "69420",
+          "todoAuthor" : "kiki", "todoTitle" : "", "todoBody" : "",
+          "todoDate" : "2000-01-22T00:00:00.0000000"
+        }
+        """;
+
+    String todo1Res = helper.sendRequest("/api/todos", HttpMethod.POST, todo1);
+    helper.sendRequest("/api/todos", HttpMethod.POST, todo2);
+
+    TodoResponse resObj = new ObjectMapper().readValue(todo1Res, TodoResponse.class);
+    // todo1의 id로 GET을 요청
+    helper.sendRequest(String.format("/api/todos/%s", resObj.getTodoId()), HttpMethod.GET);
+
+    // 존재하지 않는 id 요청
+    helper.sendRequest("/api/todos/123456789", HttpMethod.GET);
 
     Approvals.verify(helper.end(), opt);
   }

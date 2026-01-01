@@ -9,11 +9,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor(access = AccessLevel.PUBLIC)
@@ -31,6 +27,12 @@ public class TodoController {
   public ResponseEntity<List<TodoResponse>> getTodos(
       @RequestParam(required = false) Optional<String> author) {
     List<TodoResponse> res = todoService.getTodos(author);
+    return ResponseEntity.status(HttpStatus.OK).body(res);
+  }
+
+  @GetMapping("/api/todos/{todoId}")
+  public ResponseEntity<TodoResponse> getTodoById(@PathVariable Long todoId) {
+    TodoResponse res = todoService.getTodoById(todoId);
     return ResponseEntity.status(HttpStatus.OK).body(res);
   }
 }

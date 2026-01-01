@@ -46,6 +46,12 @@ public class TodoService {
     }
   }
 
+  @Transactional(readOnly = true)
+  public TodoResponse getTodoById(Long id) {
+    Todo todo = repo.findById(id).orElseThrow(() -> new IllegalStateException("존재하지 않는 일정 입니다."));
+    return todoToTodoResponse(todo);
+  }
+
   private TodoResponse todoToTodoResponse(Todo todo) {
     return new TodoResponse(
         todo.getId(),
