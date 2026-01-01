@@ -69,7 +69,7 @@ class ApiTest {
 
   @Test
   @DirtiesContext
-  void PostAndList() {
+  void postAndList() {
     helper.begin();
 
     String todo1 =
@@ -106,7 +106,7 @@ class ApiTest {
 
   @Test
   @DirtiesContext
-  void PostAndListByAuthor() {
+  void postAndListByAuthor() {
     helper.begin();
 
     String todo1 =
