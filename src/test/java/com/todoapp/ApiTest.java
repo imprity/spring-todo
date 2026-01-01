@@ -199,6 +199,37 @@ class ApiTest {
   }
 
   @Test
+  @DirtiesContext
+  void putTest() {
+    helper.begin();
+
+    String todo =
+        """
+        {
+          "password" : "69420",
+          "todoAuthor" : "bad", "todoTitle" : "bad", "todoBody" : "good",
+          "todoDate" : "2000-01-22T00:00:00.0000000"
+        }
+        """;
+
+    String newTodo =
+        """
+        {
+          "password" : "69420",
+          "todoAuthor" : "good", "todoTitle" : "good", "todoBody" : "bad",
+          "todoDate" : "2000-01-22T00:00:00.0000000"
+        }
+        """;
+
+    String todoRes = helper.sendRequest("/api/todos", HttpMethod.POST, todo);
+
+    TodoResponse resObj = new ObjectMapper().readValue(todoRes, TodoResponse.class);
+    helper.sendRequest(String.format("/api/todos/%s", resObj.getTodoId()), HttpMethod.PUT, newTodo);
+
+    Approvals.verify(helper.end(), opt);
+  }
+
+  @Test
   void testCheckIfFieldsAreDates1() {
     Assertions.assertThrows(
         ApiTestHelper.FieldNotDateException.class,

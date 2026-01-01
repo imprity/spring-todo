@@ -35,4 +35,9 @@ public class Todo extends BaseEntity {
     this.body = body;
     this.date = date;
   }
+
+  public void update(String author, String title) {
+    this.author = author;
+    this.title = title;
+  }
 }

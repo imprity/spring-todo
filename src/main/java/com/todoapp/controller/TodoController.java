@@ -2,6 +2,7 @@ package com.todoapp.controller;
 
 import com.todoapp.dto.CreateTodoRequest;
 import com.todoapp.dto.TodoResponse;
+import com.todoapp.dto.UpdateTodoRequest;
 import com.todoapp.service.TodoService;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +34,13 @@ public class TodoController {
   @GetMapping("/api/todos/{todoId}")
   public ResponseEntity<TodoResponse> getTodoById(@PathVariable Long todoId) {
     TodoResponse res = todoService.getTodoById(todoId);
+    return ResponseEntity.status(HttpStatus.OK).body(res);
+  }
+
+  @PutMapping("/api/todos/{todoId}")
+  public ResponseEntity<TodoResponse> updateTodo(
+      @PathVariable Long todoId, @RequestBody UpdateTodoRequest req) {
+    TodoResponse res = todoService.updateTodo(todoId, req);
     return ResponseEntity.status(HttpStatus.OK).body(res);
   }
 }

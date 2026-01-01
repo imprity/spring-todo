@@ -1,0 +1,48 @@
+POST /api/todos
+
+== REQUEST ==
+
+{
+  "password" : "69420",
+  "todoAuthor" : "bad", "todoTitle" : "bad", "todoBody" : "good",
+  "todoDate" : "2000-01-22T00:00:00.0000000"
+}
+
+== RESPONSE ==
+
+status code : 201 CREATED
+
+{
+  "todoId" : "{todoId}",
+  "todoAuthor" : "bad",
+  "todoTitle" : "bad",
+  "todoBody" : "good",
+  "todoDate" : "2000-01-22T00:00:00",
+  "createdAt" : "1111-02-03T04:05:06.777777",
+  "modifiedAt" : "1111-02-03T04:05:06.777777"
+}
+
+PUT /api/todos/1
+
+== REQUEST ==
+
+{
+  "password" : "69420",
+  "todoAuthor" : "good", "todoTitle" : "good", "todoBody" : "bad",
+  "todoDate" : "2000-01-22T00:00:00.0000000"
+}
+
+== RESPONSE ==
+
+status code : 200 OK
+
+{
+  "todoId" : "{todoId}",
+  "todoAuthor" : "good",
+  "todoTitle" : "good",
+  "todoBody" : "good",
+  "todoDate" : "2000-01-22T00:00:00",
+  "createdAt" : "1111-02-03T04:05:06.777777",
+  "modifiedAt" : "1111-02-03T04:05:06.777777"
+}
+

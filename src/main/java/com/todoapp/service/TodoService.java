@@ -2,6 +2,7 @@ package com.todoapp.service;
 
 import com.todoapp.dto.CreateTodoRequest;
 import com.todoapp.dto.TodoResponse;
+import com.todoapp.dto.UpdateTodoRequest;
 import com.todoapp.entity.Todo;
 import com.todoapp.repository.TodoRepository;
 import java.util.List;
@@ -23,9 +24,7 @@ public class TodoService {
 
   @Transactional
   public TodoResponse createTodo(CreateTodoRequest req) {
-    if (!password.equals(req.getPassword())) {
-      throw new WrongPasswordException();
-    }
+    checkPassword(req.getPassword());
 
     Todo todo =
         new Todo(req.getTodoAuthor(), req.getTodoTitle(), req.getTodoBody(), req.getTodoDate());
@@ -48,8 +47,31 @@ public class TodoService {
 
   @Transactional(readOnly = true)
   public TodoResponse getTodoById(Long id) {
-    Todo todo = repo.findById(id).orElseThrow(() -> new IllegalStateException("존재하지 않는 일정 입니다."));
+    Todo todo = getTodoOrThrowError(id);
     return todoToTodoResponse(todo);
+  }
+
+  @Transactional
+  public TodoResponse updateTodo(Long id, UpdateTodoRequest req) {
+    checkPassword(req.getPassword());
+
+    Todo todo = getTodoOrThrowError(id);
+
+    todo.update(req.getTodoAuthor(), req.getTodoTitle());
+
+    repo.flush(); // JPA 가 update하도록 강제, 이렇게 하지 않으면 modifiedAt이 정상적으로 업데이트가 안되더라구요...
+
+    return todoToTodoResponse(todo);
+  }
+
+  private void checkPassword(String inPassword) throws WrongPasswordException {
+    if (!password.equals(inPassword)) {
+      throw new WrongPasswordException();
+    }
+  }
+
+  private Todo getTodoOrThrowError(Long id) throws IllegalStateException {
+    return repo.findById(id).orElseThrow(() -> new IllegalStateException("존재하지 않는 일정 입니다."));
   }
 
   private TodoResponse todoToTodoResponse(Todo todo) {
