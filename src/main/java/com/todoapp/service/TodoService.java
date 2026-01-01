@@ -14,13 +14,19 @@ import org.springframework.transaction.annotation.Transactional;
 public class TodoService {
   private final TodoRepository repo;
 
+  // TODO: password를 설정 가능하게 만들기
+  private final String password = "69420";
+
   public TodoService(TodoRepository repo) {
     this.repo = repo;
   }
 
   @Transactional
   public TodoResponse createTodo(CreateTodoRequest req) {
-    // TODO: check password
+    if (!password.equals(req.getPassword())) {
+      throw new WrongPasswordException();
+    }
+
     Todo todo =
         new Todo(req.getTodoAuthor(), req.getTodoTitle(), req.getTodoBody(), req.getTodoDate());
 

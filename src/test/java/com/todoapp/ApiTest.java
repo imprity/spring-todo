@@ -137,6 +137,28 @@ class ApiTest {
   }
 
   @Test
+  @DirtiesContext
+  void wrongPassword() {
+    helper.begin();
+
+    String todo =
+        """
+        {
+          "password" : "",
+
+          "todoAuthor" : "",
+          "todoTitle" : "",
+          "todoBody" : "",
+          "todoDate" : "2000-01-22T00:00:00.0000000"
+        }
+        """;
+
+    helper.sendRequest("/api/todos", HttpMethod.POST, todo);
+
+    Approvals.verify(helper.end(), opt);
+  }
+
+  @Test
   void testCheckIfFieldsAreDates1() {
     Assertions.assertThrows(
         ApiTestHelper.FieldNotDateException.class,
