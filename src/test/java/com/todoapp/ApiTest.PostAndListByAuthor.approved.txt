@@ -1,0 +1,70 @@
+POST /api/todos
+
+== REQUEST ==
+
+{
+  "password" : "69420",
+
+  "todoAuthor" : "momo",
+  "todoTitle" : "햄버거 사기",
+  "todoBody" : "맥도날드 가서 햄버거 사기",
+  "todoDate" : "2000-01-22T00:00:00.0000000"
+}
+
+== RESPONSE ==
+
+status code : 201 CREATED
+
+{
+  "todoId" : "{todoId}",
+  "todoAuthor" : "momo",
+  "todoTitle" : "햄버거 사기",
+  "todoBody" : "맥도날드 가서 햄버거 사기",
+  "todoDate" : "2000-01-22T00:00:00",
+  "createdAt" : "1111-02-03T04:05:06.777777",
+  "modifiedAt" : "1111-02-03T04:05:06.777777"
+}
+
+POST /api/todos
+
+== REQUEST ==
+
+{
+  "password" : "69420",
+
+  "todoAuthor" : "kiki",
+  "todoTitle" : "momo의 햄버거 뺏기",
+  "todoBody" : "momo의 햄버거 뺏어서 내가 먹기",
+  "todoDate" : "2000-01-22T00:00:00.0000000"
+}
+
+== RESPONSE ==
+
+status code : 201 CREATED
+
+{
+  "todoId" : "{todoId}",
+  "todoAuthor" : "kiki",
+  "todoTitle" : "momo의 햄버거 뺏기",
+  "todoBody" : "momo의 햄버거 뺏어서 내가 먹기",
+  "todoDate" : "2000-01-22T00:00:00",
+  "createdAt" : "1111-02-03T04:05:06.777777",
+  "modifiedAt" : "1111-02-03T04:05:06.777777"
+}
+
+GET /api/todos?author=kiki
+
+== RESPONSE ==
+
+status code : 200 OK
+
+[ {
+  "todoId" : "{todoId}",
+  "todoAuthor" : "kiki",
+  "todoTitle" : "momo의 햄버거 뺏기",
+  "todoBody" : "momo의 햄버거 뺏어서 내가 먹기",
+  "todoDate" : "2000-01-22T00:00:00",
+  "createdAt" : "1111-02-03T04:05:06.777777",
+  "modifiedAt" : "1111-02-03T04:05:06.777777"
+} ]
+

@@ -1,0 +1,27 @@
+POST /api/todos
+
+== REQUEST ==
+
+{
+  "password" : "69420",
+
+  "todoAuthor" : "momo",
+  "todoTitle" : "산책하러가기",
+  "todoBody" : "밖에 산책 하러 가기",
+  "todoDate" : "2000-01-22T00:00:00.0000000"
+}
+
+== RESPONSE ==
+
+status code : 201 CREATED
+
+{
+  "todoId" : "{todoId}",
+  "todoAuthor" : "momo",
+  "todoTitle" : "산책하러가기",
+  "todoBody" : "밖에 산책 하러 가기",
+  "todoDate" : "2000-01-22T00:00:00",
+  "createdAt" : "1111-02-03T04:05:06.777777",
+  "modifiedAt" : "1111-02-03T04:05:06.777777"
+}
+

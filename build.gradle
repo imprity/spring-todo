@@ -33,8 +33,14 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation 'com.approvaltests:approvaltests:26.1.0'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+
+    testLogging {
+        exceptionFormat = "full"
+        showStackTraces = false
+    }
 }
