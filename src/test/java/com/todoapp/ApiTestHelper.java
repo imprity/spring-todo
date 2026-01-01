@@ -41,8 +41,18 @@ class ApiTestHelper {
     builder.setLength(0);
   }
 
-  private String sendRequestImpl(String uri, HttpMethod method, String body, boolean sendBody) {
-    builder.append(String.format("%s %s\n\n", method.name(), uri));
+  private String sendRequestImpl(
+      String uri,
+      String replacedUri,
+      boolean replaceUri,
+      HttpMethod method,
+      String body,
+      boolean sendBody) {
+    if (replaceUri) {
+      builder.append(String.format("%s %s\n\n", method.name(), replacedUri));
+    } else {
+      builder.append(String.format("%s %s\n\n", method.name(), uri));
+    }
 
     if (sendBody) {
       builder.append("== REQUEST ==\n\n");
@@ -88,12 +98,20 @@ class ApiTestHelper {
     return resBody;
   }
 
-  public String sendRequest(String url, HttpMethod method) {
-    return sendRequestImpl(url, method, "", false);
+  public String sendRequest(String uri, HttpMethod method) {
+    return sendRequestImpl(uri, "", false, method, "", false);
   }
 
-  public String sendRequest(String url, HttpMethod method, String body) {
-    return sendRequestImpl(url, method, body, true);
+  public String sendRequest(String uri, HttpMethod method, String body) {
+    return sendRequestImpl(uri, "", false, method, body, true);
+  }
+
+  public String sendRequest(String uri, String replacedUri, HttpMethod method) {
+    return sendRequestImpl(uri, replacedUri, true, method, "", false);
+  }
+
+  public String sendRequest(String uri, String replacedUri, HttpMethod method, String body) {
+    return sendRequestImpl(uri, replacedUri, true, method, body, true);
   }
 
   public String end() {

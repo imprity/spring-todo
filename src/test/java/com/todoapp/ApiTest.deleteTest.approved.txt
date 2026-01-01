@@ -70,7 +70,7 @@ status code : 200 OK
   "modifiedAt" : "1111-02-03T04:05:06.777777"
 } ]
 
-DELETE /api/todos/1
+DELETE /api/todos/{todoId}
 
 == RESPONSE ==
 

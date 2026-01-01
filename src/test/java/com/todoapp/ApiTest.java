@@ -4,6 +4,7 @@ import com.todoapp.dto.TodoResponse;
 import jakarta.annotation.PostConstruct;
 import org.approvaltests.Approvals;
 import org.approvaltests.core.Options;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpMethod;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.test.web.servlet.client.RestTestClient;
 import tools.jackson.databind.ObjectMapper;
 
@@ -45,11 +47,25 @@ class ApiTest {
     opt = opt.withReporter(new org.approvaltests.reporters.ReportNothing());
   }
 
-  // 왜 @Transactional이 아니고 @DirtiesContext를 쓰는지는 아래 링크 참고
-  // https://stackoverflow.com/questions/64591281/transactional-annotation-in-spring-test
-  // https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/test/annotation/DirtiesContext.html
+  // 저는 WebEnvironment를 MOCk이 아닌 RANDOM_PORT를 쓰기로 하였습니다.
+  //
+  // MOCK도 나름 비슷하긴 하지만 서버에서 에러가 났을 경우 에러를 json 형태로 반환하지 않고
+  // java에러를 돌려주기 때문입니다.
+  //
+  // 하지만 슬플게도 WebEnvironment가 MOCk이 아닌 RANDOM_PORT인 경우
+  // @Transactional은 DB를 rollback하지 않습니다. 왜냐하면 별도의 Thread에서 실제 sever를 구동하기 때문입니다.
+  //
+  // 전에는 @DirtiesContext를 썼지만 너무우우우 느리기 때문에 이 방법을 썼습니다.
+  //
+  // 하지만 이 방법도 문제인게 비우고 싶은 테이블의 이름을 일일이 직접 입력해야 합니다.
+  //
+  // ... 그래도 더 낳은 방법이 떠오르지 않기 때문에 이대로 진행
+  @AfterEach
+  void cleanupDb(@Autowired JdbcTemplate template) {
+    JdbcTestUtils.deleteFromTables(template, "todos");
+  }
+
   @Test
-  @DirtiesContext
   void postTest() {
     helper.begin();
 
@@ -70,7 +86,6 @@ class ApiTest {
   }
 
   @Test
-  @DirtiesContext
   void postAndList() {
     helper.begin();
 
@@ -107,7 +122,6 @@ class ApiTest {
   }
 
   @Test
-  @DirtiesContext
   void postAndListByAuthor() {
     helper.begin();
 
@@ -144,7 +158,6 @@ class ApiTest {
   }
 
   @Test
-  @DirtiesContext
   void wrongPassword() {
     helper.begin();
 
@@ -166,7 +179,6 @@ class ApiTest {
   }
 
   @Test
-  @DirtiesContext
   void getById() {
     helper.begin();
 
@@ -192,7 +204,8 @@ class ApiTest {
 
     TodoResponse resObj = new ObjectMapper().readValue(todo1Res, TodoResponse.class);
     // todo1의 id로 GET을 요청
-    helper.sendRequest(String.format("/api/todos/%s", resObj.getTodoId()), HttpMethod.GET);
+    helper.sendRequest(
+        String.format("/api/todos/%s", resObj.getTodoId()), "/api/todos/{todoId}", HttpMethod.GET);
 
     // 존재하지 않는 id 요청
     helper.sendRequest("/api/todos/123456789", HttpMethod.GET);
@@ -201,7 +214,6 @@ class ApiTest {
   }
 
   @Test
-  @DirtiesContext
   void putTest() {
     helper.begin();
 
@@ -226,13 +238,16 @@ class ApiTest {
     String todoRes = helper.sendRequest("/api/todos", HttpMethod.POST, todo);
 
     TodoResponse resObj = new ObjectMapper().readValue(todoRes, TodoResponse.class);
-    helper.sendRequest(String.format("/api/todos/%s", resObj.getTodoId()), HttpMethod.PUT, newTodo);
+    helper.sendRequest(
+        String.format("/api/todos/%s", resObj.getTodoId()),
+        "/api/todos/{todoId}",
+        HttpMethod.PUT,
+        newTodo);
 
     Approvals.verify(helper.end(), opt);
   }
 
   @Test
-  @DirtiesContext
   void deleteTest() {
     helper.begin();
 
@@ -263,7 +278,10 @@ class ApiTest {
     // id 가져오기
     TodoResponse resObj = new ObjectMapper().readValue(todo1Res, TodoResponse.class);
     // todo1의 id로 DELETE를 요청
-    helper.sendRequest(String.format("/api/todos/%s", resObj.getTodoId()), HttpMethod.DELETE);
+    helper.sendRequest(
+        String.format("/api/todos/%s", resObj.getTodoId()),
+        "/api/todos/{todoId}",
+        HttpMethod.DELETE);
 
     helper.sendRequest("/api/todos", HttpMethod.GET);
 

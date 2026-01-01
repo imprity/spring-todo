@@ -46,7 +46,7 @@ status code : 201 CREATED
   "modifiedAt" : "1111-02-03T04:05:06.777777"
 }
 
-GET /api/todos/1
+GET /api/todos/{todoId}
 
 == RESPONSE ==
 
