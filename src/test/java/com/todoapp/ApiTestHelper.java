@@ -118,7 +118,9 @@ class ApiTestHelper {
           if (n.isObject()) {
             ObjectNode obj = (ObjectNode) n;
             for (String field : fields) {
-              obj.put(field, with);
+              if (obj.has(field)) {
+                obj.put(field, with);
+              }
             }
           }
         });
