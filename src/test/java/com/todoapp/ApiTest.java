@@ -230,6 +230,48 @@ class ApiTest {
   }
 
   @Test
+  @DirtiesContext
+  void deleteTest() {
+    helper.begin();
+
+    String todo1 =
+        """
+          {
+            "password" : "69420",
+            "todoAuthor" : "kiki", "todoTitle" : "고백", "todoBody" : "momo한테 고백하기",
+            "todoDate" : "2000-01-22T00:00:00.0000000"
+          }
+        """;
+    String todo2 =
+        """
+          {
+            "password" : "69420",
+            "todoAuthor" : "momo", "todoTitle" : "낮잠", "todoBody" : "낮잠 자기",
+            "todoDate" : "2000-01-22T00:00:00.0000000"
+          }
+        """;
+
+    String todo1Res = helper.sendRequest("/api/todos", HttpMethod.POST, todo1);
+    helper.sendRequest("/api/todos", HttpMethod.POST, todo2);
+
+    helper.sendRequest("/api/todos", HttpMethod.GET);
+
+    // 삭제 시도
+
+    // id 가져오기
+    TodoResponse resObj = new ObjectMapper().readValue(todo1Res, TodoResponse.class);
+    // todo1의 id로 DELETE를 요청
+    helper.sendRequest(String.format("/api/todos/%s", resObj.getTodoId()), HttpMethod.DELETE);
+
+    helper.sendRequest("/api/todos", HttpMethod.GET);
+
+    // 존재하지 않는 id 삭제 요청
+    helper.sendRequest("/api/todos/123456789", HttpMethod.DELETE);
+
+    Approvals.verify(helper.end(), opt);
+  }
+
+  @Test
   void testCheckIfFieldsAreDates1() {
     Assertions.assertThrows(
         ApiTestHelper.FieldNotDateException.class,

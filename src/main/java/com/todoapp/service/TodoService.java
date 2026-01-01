@@ -64,6 +64,15 @@ public class TodoService {
     return todoToTodoResponse(todo);
   }
 
+  @Transactional
+  public void deleteTodo(Long id) {
+    if (!repo.existsById(id)) {
+      throw new IllegalStateException("존재하지 않는 일정 입니다.");
+    }
+
+    repo.deleteById(id);
+  }
+
   private void checkPassword(String inPassword) throws WrongPasswordException {
     if (!password.equals(inPassword)) {
       throw new WrongPasswordException();
