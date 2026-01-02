@@ -74,6 +74,81 @@ DELETE /api/todos/{todoId}
 
 == RESPONSE ==
 
+status code : 400 BAD_REQUEST
+
+{
+  "timestamp" : "1111-02-03T04:05:06.666Z",
+  "status" : 400,
+  "error" : "Bad Request",
+  "path" : "{requestPath}"
+}
+
+GET /api/todos
+
+== RESPONSE ==
+
+status code : 200 OK
+
+[ {
+  "todoId" : "{todoId}",
+  "todoAuthor" : "kiki",
+  "todoTitle" : "고백",
+  "todoBody" : "momo한테 고백하기",
+  "todoDate" : "2000-01-22T00:00:00",
+  "createdAt" : "1111-02-03T04:05:06.777777",
+  "modifiedAt" : "1111-02-03T04:05:06.777777"
+}, {
+  "todoId" : "{todoId}",
+  "todoAuthor" : "momo",
+  "todoTitle" : "낮잠",
+  "todoBody" : "낮잠 자기",
+  "todoDate" : "2000-01-22T00:00:00",
+  "createdAt" : "1111-02-03T04:05:06.777777",
+  "modifiedAt" : "1111-02-03T04:05:06.777777"
+} ]
+
+DELETE /api/todos/{todoId}
+
+== REQUEST ==
+
+{ "password" : "meme" }
+== RESPONSE ==
+
+status code : 400 BAD_REQUEST
+
+
+
+GET /api/todos
+
+== RESPONSE ==
+
+status code : 200 OK
+
+[ {
+  "todoId" : "{todoId}",
+  "todoAuthor" : "kiki",
+  "todoTitle" : "고백",
+  "todoBody" : "momo한테 고백하기",
+  "todoDate" : "2000-01-22T00:00:00",
+  "createdAt" : "1111-02-03T04:05:06.777777",
+  "modifiedAt" : "1111-02-03T04:05:06.777777"
+}, {
+  "todoId" : "{todoId}",
+  "todoAuthor" : "momo",
+  "todoTitle" : "낮잠",
+  "todoBody" : "낮잠 자기",
+  "todoDate" : "2000-01-22T00:00:00",
+  "createdAt" : "1111-02-03T04:05:06.777777",
+  "modifiedAt" : "1111-02-03T04:05:06.777777"
+} ]
+
+DELETE /api/todos/{todoId}
+
+== REQUEST ==
+
+{ "password" : "69420" }
+== RESPONSE ==
+
 status code : 204 NO_CONTENT
 
 
@@ -93,17 +168,4 @@ status code : 200 OK
   "createdAt" : "1111-02-03T04:05:06.777777",
   "modifiedAt" : "1111-02-03T04:05:06.777777"
 } ]
-
-DELETE /api/todos/123456789
-
-== RESPONSE ==
-
-status code : 500 INTERNAL_SERVER_ERROR
-
-{
-  "timestamp" : "1111-02-03T04:05:06.666Z",
-  "status" : 500,
-  "error" : "Internal Server Error",
-  "path" : "/api/todos/123456789"
-}
 

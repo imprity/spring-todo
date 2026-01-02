@@ -1,6 +1,7 @@
 package com.todoapp.controller;
 
 import com.todoapp.dto.CreateTodoRequest;
+import com.todoapp.dto.DeleteTodoRequest;
 import com.todoapp.dto.TodoResponse;
 import com.todoapp.dto.UpdateTodoRequest;
 import com.todoapp.service.TodoService;
@@ -45,8 +46,9 @@ public class TodoController {
   }
 
   @DeleteMapping("/api/todos/{todoId}")
-  public ResponseEntity<Void> deleteTodo(@PathVariable Long todoId) {
-    todoService.deleteTodo(todoId);
+  public ResponseEntity<Void> deleteTodo(
+      @PathVariable Long todoId, @RequestBody DeleteTodoRequest req) {
+    todoService.deleteTodo(todoId, req);
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 }

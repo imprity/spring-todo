@@ -40,6 +40,8 @@ class ApiTest {
     // spring 기본 에러 timestamp 제거
     helper.addFieldsToReplace("1111-02-03T04:05:06.666Z", "timestamp");
     helper.addFieldsToReplace("{todoId}", "todoId");
+    // spring 기본 에러 path 제거
+    helper.addFieldsToReplace("{requestPath}", "path");
 
     // approvaltests는 option이 없으면 diff툴을 띄우도록 설정이 되어있습니다.
     // 누구 아이디어인지 모르겠지만 짜증나므로 off
@@ -277,16 +279,29 @@ class ApiTest {
 
     // id 가져오기
     TodoResponse resObj = new ObjectMapper().readValue(todo1Res, TodoResponse.class);
-    // todo1의 id로 DELETE를 요청
+
+    // 비밀번호 없이 삭제 요청
     helper.sendRequest(
         String.format("/api/todos/%s", resObj.getTodoId()),
         "/api/todos/{todoId}",
         HttpMethod.DELETE);
-
     helper.sendRequest("/api/todos", HttpMethod.GET);
 
-    // 존재하지 않는 id 삭제 요청
-    helper.sendRequest("/api/todos/123456789", HttpMethod.DELETE);
+    // 틀린 비밀번호 삭제 요청
+    helper.sendRequest(
+        String.format("/api/todos/%s", resObj.getTodoId()),
+        "/api/todos/{todoId}",
+        HttpMethod.DELETE,
+        "{ \"password\" : \"meme\" }");
+    helper.sendRequest("/api/todos", HttpMethod.GET);
+
+    // 정상적 삭제 요청
+    helper.sendRequest(
+        String.format("/api/todos/%s", resObj.getTodoId()),
+        "/api/todos/{todoId}",
+        HttpMethod.DELETE,
+        "{ \"password\" : \"69420\" }");
+    helper.sendRequest("/api/todos", HttpMethod.GET);
 
     Approvals.verify(helper.end(), opt);
   }

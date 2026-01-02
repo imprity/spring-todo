@@ -72,6 +72,6 @@ status code : 500 INTERNAL_SERVER_ERROR
   "timestamp" : "1111-02-03T04:05:06.666Z",
   "status" : 500,
   "error" : "Internal Server Error",
-  "path" : "/api/todos/123456789"
+  "path" : "{requestPath}"
 }
 

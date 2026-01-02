@@ -1,6 +1,7 @@
 package com.todoapp.service;
 
 import com.todoapp.dto.CreateTodoRequest;
+import com.todoapp.dto.DeleteTodoRequest;
 import com.todoapp.dto.TodoResponse;
 import com.todoapp.dto.UpdateTodoRequest;
 import com.todoapp.entity.Todo;
@@ -65,7 +66,9 @@ public class TodoService {
   }
 
   @Transactional
-  public void deleteTodo(Long id) {
+  public void deleteTodo(Long id, DeleteTodoRequest req) {
+    checkPassword(req.getPassword());
+
     if (!repo.existsById(id)) {
       throw new IllegalStateException("존재하지 않는 일정 입니다.");
     }
