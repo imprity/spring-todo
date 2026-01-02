@@ -195,3 +195,17 @@ Formatter는 [google-java-format](https://github.com/google/google-java-format)�
 - REFACTOR: refactoring
 - MISC:     기타
 
+## 3 Layer Achitecture가 필요한 이유
+
+Controller, Service, Repository가 역활을 공유하기에는 책임이 너무 다르기 때문입니다.
+
+Controller는 유저한테 응답을 돌려주는 역활을 하고
+Service는 비지니스 로직을 담당하고
+Repository는 정보를 저장하는 역활을 담당합니다.
+
+## @RequestParam, @PathVariable, @RequestBody 설명
+
+- @RequestParam : url의 parameter를(www.google.come?key=value) argument에 적힌 타입으로 반환해 넣어줍니다.
+- @PathVariable : api URL의 path 부분을 argument에 적힌 타입으로 반환해 넣어줍니다.
+- @RequestBody : request의 body를 argument에 적힌 타입으로 반환해 넣어줍니다.
+
