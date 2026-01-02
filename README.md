@@ -1,10 +1,51 @@
 # Sparta TODO-app Project
 
+## 프로젝트 개요
+- 프로젝트 목적: Spring공부를 위한 간단한 TODO app
+
+## 기술 스택
+- Language: Java 17
+- IDE: IntelliJ IDEA
+
+## 빌드
+
+빌드를 위해서는 JDK 17이 필요합니다.
+
+이 명령어를 입력해 주세요
+```
+gradlew build
+```
+
+리눅스에서는 이렇게 해야 합니다.
+```
+./gradlew build
+```
+
+## 실행
+그냥 돌아가는 것만 보고 싶으시다면 이 명령어를 쓰세요
+```
+gradlew bootRun
+```
+
+비밀번호는 69420로 고정되어 있습니다 (아직은).
+
+기본적으로 실제 DB를 쓰지 않고 [H2](https://www.h2database.com/html/main.html)라는 embedded 데이터베이스를 이용하여 파일이 아닌 메모리 상으로만 저장하도록 설정하게 되어 있습니다. 
+
+다른 설정을 쓰고 싶으시다면 이 방법을 쓰세요(windows 예시). mysql 설정 파일 예시는 application-template.properties에 있습니다.
+
+```
+gradlew bootRun --args="--spring.config.location=file:.\\application-template.properties"
+```
+
 ## Formatter
 
 Formatter는 [google-java-format](https://github.com/google/google-java-format)을 사용합니다. 저는 간단한 batch파일을 이용해서 포맷합니다.
 
 (fmt.bat 참고)
+
+## ERD
+
+![erd](readme/erd.png)
 
 # API 명세서
 
@@ -12,7 +53,7 @@ Formatter는 [google-java-format](https://github.com/google/google-java-format)�
 
 ### `GET` 모든 todo 반환
 
-### RESPONSE
+### RESPONSE 200
 ```
 [
     {
@@ -52,7 +93,7 @@ Formatter는 [google-java-format](https://github.com/google/google-java-format)�
 }
 ```
 
-### RESPONSE
+### RESPONSE 201
 ```
 {
     "todoId" : "1",
@@ -70,7 +111,7 @@ Formatter는 [google-java-format](https://github.com/google/google-java-format)�
 
 ### `GET` 해당 작성자의 todo 반환
 
-### RESPONSE
+### RESPONSE 200
 ```
 [
     {
@@ -90,7 +131,7 @@ Formatter는 [google-java-format](https://github.com/google/google-java-format)�
 
 ### `GET` 해당 todo-id의 todo 반환
 
-### RESPONSE
+### RESPONSE 200
 ```
 {
     "todoId" : "1",
@@ -116,7 +157,7 @@ Formatter는 [google-java-format](https://github.com/google/google-java-format)�
 },
 ```
 
-### RESPONSE
+### RESPONSE 200
 ```
 {
     "todoId" : "1",
@@ -131,6 +172,21 @@ Formatter는 [google-java-format](https://github.com/google/google-java-format)�
 ```
 
 ### `DELETE` 해당 todo-id의 todo 삭제
+
+### REQUEST
+```
+{
+    "password" : "69420",
+},
+```
+
+### RESPONSE 204
+
+## POSTMAN 실행 결과들
+
+![postman1](./readme/postman1.png)
+![postman2](./readme/postman2.png)
+![postman3](./readme/postman3.png)
 
 ## git convention
 
